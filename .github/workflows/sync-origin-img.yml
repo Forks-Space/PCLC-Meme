@@ -1,8 +1,8 @@
 name: Sync pictures
-
 on:
     schedule:
         - cron: '0 22 * * *'
+        - cron: '0 10 * * *'
     workflow_dispatch:
 permissions:
   contents: write
@@ -13,27 +13,21 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v4
-
-            - name: Clone from origin repo
-              run: |
-                git config --global user.email "action@github.com"
-                git config --global user.name "GitHub Action"
-                git clone https://github.com/PCL-Community/worldhim-alist-backup.git
             
-            - name: Get files
+            - name: Download pictures from alist
+              
               run: |
-                cd worldhim-alist-backup
+                # 直接从 alist 下载图片，下载完后会有一个 randpic 文件夹
+                python get.py
+                
+                # 删掉无用图片
                 rm -rf randpic/httpcat
                 rm -rf randpic/http
                 rm -rf randpic/vlog
-                mv randpic ..
-                cd ..
-                rm -rf worldhim-alist-backup
-                rm -rf meme
-
             
             - name: Run script
               run: |
+                # 会把需要的文件移动到 meme
                 python sync.py
             
             - name: Delete temp files
@@ -74,7 +68,7 @@ jobs:
         permissions:
           contents: write
         steps:
-          - uses: actions/checkout@v2
+          - uses: actions/checkout@v4
             with:
               ref: ${{ github.ref }}
           - name: build config
