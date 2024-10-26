@@ -37,6 +37,7 @@ jobs:
                 # codes from: https://github.com/PCL-Community/PCL2Help-Backup/blob/main/.github/workflows/sync.yml
               id: check_commit
               run: |
+                  git pull
                   # 检查是否有文件被修改但尚未提交
                   if [[ $(git status --porcelain) ]]; then
                       echo "有文件被修改但尚未提交。"
