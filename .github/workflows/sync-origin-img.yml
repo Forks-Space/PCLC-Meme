@@ -1,8 +1,8 @@
 name: Sync pictures
 on:
     schedule:
-        - cron: '0 22 * * *'
-        - cron: '0 10 * * *'
+        - cron: '0 22 * * *' # UTC+8 6:00
+        - cron: '0 10 * * *' # UTC+8 18:00
     workflow_dispatch:
 permissions:
   contents: write
@@ -19,7 +19,6 @@ jobs:
               run: |
                 # 直接从 alist 下载图片，下载完后会有一个 randpic 文件夹
                 python get.py
-                
                 # 删掉无用图片
                 rm -rf randpic/httpcat
                 rm -rf randpic/http
